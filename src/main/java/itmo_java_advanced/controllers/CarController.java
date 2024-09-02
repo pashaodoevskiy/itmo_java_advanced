@@ -2,6 +2,7 @@ package itmo_java_advanced.controllers;
 
 import itmo_java_advanced.model.dto.request.CarRequest;
 import itmo_java_advanced.model.dto.response.ApiResponse;
+import itmo_java_advanced.model.dto.response.CarResponse;
 import itmo_java_advanced.services.CarService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ public class CarController {
     }
 
     @GetMapping("/{id}")
-    public ApiResponse getCar(@PathVariable Long id) {
+    public CarResponse getCar(@PathVariable Long id) {
         return this.carService.getCar(id);
     }
 
