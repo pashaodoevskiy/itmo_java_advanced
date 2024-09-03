@@ -1,6 +1,6 @@
 package itmo_java_advanced.model.dto.response;
 
-import itmo_java_advanced.model.dto.request.CarRequest;
+import itmo_java_advanced.model.dto.request.UserRequest;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -9,6 +9,6 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CarResponse extends CarRequest {
+public class UserResponse extends UserRequest {
     Long id;
 }

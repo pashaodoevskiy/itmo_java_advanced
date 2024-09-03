@@ -1,5 +1,6 @@
 package itmo_java_advanced.model.dto.request;
 
+import itmo_java_advanced.enums.Gender;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
@@ -10,8 +11,9 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CarRequest {
-    String model;
-    Integer year;
-    String color;
+public class UserRequest {
+    String name;
+    String surname;
+    Integer age;
+    Gender gender;
 }
