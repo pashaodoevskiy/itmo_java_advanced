@@ -7,7 +7,7 @@ import itmo_java_advanced.services.UserService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 public class UserController {
 
     private final UserService userService = new UserService();
