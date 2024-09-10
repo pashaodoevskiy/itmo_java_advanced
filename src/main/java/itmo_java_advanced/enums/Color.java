@@ -5,9 +5,10 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum Gender {
-    MALE("М"),
-    FEMALE("Ж");
+public enum Color {
+    BLACK("Черный"),
+    WHITE("Белый"),
+    RED("Красный");
 
     private final String description;
 }
