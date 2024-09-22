@@ -8,7 +8,12 @@ import itmo_java_advanced.model.dto.request.UserRequest;
 import itmo_java_advanced.model.dto.response.ApiResponse;
 import itmo_java_advanced.model.dto.response.CarResponse;
 import itmo_java_advanced.model.dto.response.UserResponse;
+import itmo_java_advanced.utils.PaginationUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -54,11 +59,21 @@ public class UserService {
         return new ApiResponse();
     }
 
-    public List<UserResponse> getAllUsers() {
-        return userRepository.findAll()
-                .stream()
+    public Page<UserResponse> getAllUsers(Integer page, Integer perPage, String sort, Sort.Direction order, String filter) {
+        Pageable pageRequest = PaginationUtil.getPageRequest(page, perPage, sort, order);
+
+        Page<User> users;
+        if (filter == null) {
+            users = userRepository.findAll(pageRequest);
+        } else {
+            users = userRepository.findAllWithNameAndSurnameFilter(pageRequest, filter);
+        }
+
+        List<UserResponse> content = users.getContent().stream()
                 .map(user -> mapper.convertValue(user, UserResponse.class))
                 .collect(Collectors.toList());
+
+        return new PageImpl<>(content, pageRequest, users.getTotalElements());
     }
 
     public User getUserFromDB(Long id) {

@@ -8,6 +8,8 @@ import itmo_java_advanced.model.dto.response.CarResponse;
 import itmo_java_advanced.model.dto.response.UserResponse;
 import itmo_java_advanced.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,8 +48,14 @@ public class UserController {
 
     @Operation(summary = "Получить список пользователей")
     @GetMapping
-    public List<UserResponse> getAllUsers() {
-        return userService.getAllUsers();
+    public Page<UserResponse> getAllUsers(@RequestParam(defaultValue = "1") Integer page,
+                                          @RequestParam(defaultValue = "10") Integer perPage,
+                                          @RequestParam(defaultValue = "id") String sort,
+                                          @RequestParam(defaultValue = "ASC") Sort.Direction order,
+                                          @RequestParam(required = false) String filter
+
+    ) {
+        return userService.getAllUsers(page, perPage, sort, order, filter);
     }
 
     @Operation(summary = "Получить список автомобилей по пользователю")
