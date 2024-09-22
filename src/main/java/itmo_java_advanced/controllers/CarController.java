@@ -3,13 +3,14 @@ package itmo_java_advanced.controllers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import itmo_java_advanced.model.dto.request.CarRequest;
+import itmo_java_advanced.model.dto.request.CarToUserRequest;
 import itmo_java_advanced.model.dto.response.ApiResponse;
 import itmo_java_advanced.model.dto.response.CarResponse;
 import itmo_java_advanced.services.CarService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Tag(name = "Автомобили")
 @RestController
@@ -44,7 +45,19 @@ public class CarController {
 
     @Operation(summary = "Получить список автомобилей")
     @GetMapping
-    public List<CarResponse> getAllCars() {
-        return carService.getAllCars();
+    public Page<CarResponse> getAllCars(@RequestParam(defaultValue = "1") Integer page,
+                                        @RequestParam(defaultValue = "10") Integer perPage,
+                                        @RequestParam(defaultValue = "id") String sort,
+                                        @RequestParam(defaultValue = "ASC") Sort.Direction order,
+                                        @RequestParam(required = false) String filter
+
+    ) {
+        return carService.getAllCars(page, perPage, sort, order, filter);
+    }
+
+    @Operation(summary = "Добавить автомобиль пользователю")
+    @PostMapping("/carToUser")
+    public ApiResponse addCarToUser(@RequestBody CarToUserRequest carToUserRequest) {
+        return carService.addCarToUser(carToUserRequest);
     }
 }

@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import itmo_java_advanced.model.dto.request.UserRequest;
 import itmo_java_advanced.model.dto.response.ApiResponse;
+import itmo_java_advanced.model.dto.response.CarResponse;
 import itmo_java_advanced.model.dto.response.UserResponse;
 import itmo_java_advanced.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -47,5 +48,11 @@ public class UserController {
     @GetMapping
     public List<UserResponse> getAllUsers() {
         return userService.getAllUsers();
+    }
+
+    @Operation(summary = "Получить список автомобилей по пользователю")
+    @GetMapping("/{id}/cars")
+    public List<CarResponse> getAllCarsByUserId(@PathVariable Long id) {
+        return userService.getAllCarsByUserId(id);
     }
 }

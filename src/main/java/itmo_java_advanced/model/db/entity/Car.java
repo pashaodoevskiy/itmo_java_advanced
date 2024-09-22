@@ -1,5 +1,6 @@
 package itmo_java_advanced.model.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import itmo_java_advanced.enums.Color;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -29,5 +30,6 @@ public class Car extends BaseEntity {
     Integer year;
 
     @ManyToOne
+    @JsonBackReference(value = "driver_cars")
     User user;
 }

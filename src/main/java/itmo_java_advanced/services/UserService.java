@@ -1,10 +1,12 @@
 package itmo_java_advanced.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import itmo_java_advanced.model.db.entity.Car;
 import itmo_java_advanced.model.db.entity.User;
 import itmo_java_advanced.model.db.repository.UserRepository;
 import itmo_java_advanced.model.dto.request.UserRequest;
 import itmo_java_advanced.model.dto.response.ApiResponse;
+import itmo_java_advanced.model.dto.response.CarResponse;
 import itmo_java_advanced.model.dto.response.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -59,9 +61,22 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    private User getUserFromDB(Long id) {
+    public User getUserFromDB(Long id) {
         return userRepository
                 .findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден"));
+    }
+
+    public void updateUserData(User user) {
+        userRepository.save(user);
+    }
+
+    public List<CarResponse> getAllCarsByUserId(Long id) {
+        List<Car> cars = getUserFromDB(id).getCars();
+
+        return cars
+                .stream()
+                .map(car -> mapper.convertValue(car, CarResponse.class))
+                .collect(Collectors.toList());
     }
 }

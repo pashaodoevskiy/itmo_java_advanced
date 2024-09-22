@@ -1,5 +1,6 @@
 package itmo_java_advanced.model.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import itmo_java_advanced.enums.Gender;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -33,5 +34,6 @@ public class User extends BaseEntity {
     Gender gender;
 
     @OneToMany
+    @JsonManagedReference(value = "driver_cars")
     List<Car> cars;
 }
