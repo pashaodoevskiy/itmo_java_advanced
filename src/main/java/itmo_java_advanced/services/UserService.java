@@ -1,6 +1,7 @@
 package itmo_java_advanced.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import itmo_java_advanced.exceptions.CustomException;
 import itmo_java_advanced.model.db.entity.Car;
 import itmo_java_advanced.model.db.entity.User;
 import itmo_java_advanced.model.db.repository.UserRepository;
@@ -14,9 +15,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +27,24 @@ public class UserService {
     private final UserRepository userRepository;
     private final ObjectMapper mapper;
 
+    private void validateCreateRequest(UserRequest userRequest) {
+        if (userRequest.getName() == null) {
+            throw new CustomException("Поле name обязательно для заполнения", HttpStatus.BAD_REQUEST);
+        }
+
+        if (userRequest.getSurname() == null) {
+            throw new CustomException("Поле surname обязательно для заполнения", HttpStatus.BAD_REQUEST);
+        }
+
+        userRepository.findByNameAndSurname(userRequest.getName(), userRequest.getSurname())
+                .ifPresent(user -> {
+                    throw new CustomException(String.format("Пользователь %s %s уже существует", user.getName(), user.getSurname()), HttpStatus.BAD_REQUEST);
+                });
+    }
+
     public UserResponse createUser(UserRequest userRequest) {
+        validateCreateRequest(userRequest);
+
         User user = mapper.convertValue(userRequest, User.class);
         userRepository.save(user);
 
@@ -51,7 +69,7 @@ public class UserService {
 
     public ApiResponse deleteUser(Long id) {
         if(!userRepository.existsById(id)) {
-            throw new EntityNotFoundException("Пользователь не найден");
+            throw new CustomException("Пользователь не найден", HttpStatus.NOT_FOUND);
         }
 
         userRepository.deleteById(id);
@@ -79,7 +97,7 @@ public class UserService {
     public User getUserFromDB(Long id) {
         return userRepository
                 .findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден"));
+                .orElseThrow(() -> new CustomException("Пользователь не найден", HttpStatus.NOT_FOUND));
     }
 
     public void updateUserData(User user) {
