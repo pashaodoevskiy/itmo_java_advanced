@@ -46,9 +46,9 @@ public class UserService {
         validateCreateRequest(userRequest);
 
         User user = mapper.convertValue(userRequest, User.class);
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
 
-        return mapper.convertValue(user, UserResponse.class);
+        return mapper.convertValue(savedUser, UserResponse.class);
     }
 
     public UserResponse getUser(Long id) {
@@ -100,8 +100,8 @@ public class UserService {
                 .orElseThrow(() -> new CustomException("Пользователь не найден", HttpStatus.NOT_FOUND));
     }
 
-    public void updateUserData(User user) {
-        userRepository.save(user);
+    public User updateUserData(User user) {
+        return userRepository.save(user);
     }
 
     public List<CarResponse> getAllCarsByUserId(Long id) {

@@ -47,8 +47,9 @@ public class CarService {
         validateCreateRequest(carRequest);
 
         Car car = mapper.convertValue(carRequest, Car.class);
+        Car savedCar = carRepository.save(car);
 
-        return mapper.convertValue(carRepository.save(car), CarResponse.class);
+        return mapper.convertValue(savedCar, CarResponse.class);
     }
 
     public CarResponse getCar(Long id) {

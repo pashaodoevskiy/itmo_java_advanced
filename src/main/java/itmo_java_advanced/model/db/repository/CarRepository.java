@@ -21,13 +21,13 @@ public interface CarRepository extends JpaRepository<Car, Long> {
 
     List<Car> findAllByModel(String model);
 
-    // sql Structured Query Language
-    @Query(nativeQuery = true, value = "select * from cars where id > 10 limit = :limit")
-    Car getCar(@Param("limit") Integer limit); // аннотация Param позволяет задать название переменной которая будет передаваться в sql запрос
-
-    //hql Hibernate Query Language
-    @Query("select c from Car c where c.color = :color and c.user.id = :userId")
-    List<Car> findCarsByColorAndUserId(@Param("color") Color color, @Param("userId") Integer id);
+//    // sql Structured Query Language
+//    @Query(nativeQuery = true, value = "select * from cars where id > 10 limit = :limit")
+//    Car getCar(@Param("limit") Integer limit); // аннотация Param позволяет задать название переменной которая будет передаваться в sql запрос
+//
+//    //hql Hibernate Query Language
+//    @Query("select c from Car c where c.color = :color and c.user.id = :userId")
+//    List<Car> findCarsByColorAndUserId(@Param("color") Color color, @Param("userId") Integer id);
 
     @Query("select c from Car c where lower(c.model) like  %:filter%")
     Page<Car> findAllWithModelFilter(Pageable pageRequest, @Param("filter") String filter);
